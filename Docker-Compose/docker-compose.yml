@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  selenium-firefox:
+    image: selenium/standalone-firefox:4.0.0-beta-1-20210215
+    ports:
+      - "4444:4444"
+    networks:
+      - testes-selenium
+  worker-extracao:
+    image: renatogroffe/worker-cotacoes-dotnet5:latest
+    networks:
+      - testes-selenium
+    depends_on:
+      - selenium-firefox
+    environment:
+      MongoDB__ConnectionString: STRING DE CONEXÃO
+      MongoDB__Database: DBExtracoesContainer
+      MongoDB__Collection: Cotacoes
+      UrlRemoteWebDriver: http://selenium-firefox/wd/hub
+      UrlPaginaCotacoes: ENDEREÇO SITE
+networks:
+  testes-selenium:
+    driver: bridge
